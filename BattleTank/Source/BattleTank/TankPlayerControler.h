@@ -17,4 +17,5 @@ class BATTLETANK_API ATankPlayerControler : public APlayerController
 public:
 	ATank* GetControlledTank() const;
 	
+	virtual void BeginPlay() override;
 };
