@@ -2,6 +2,7 @@
 
 #include "TankPlayerControler.h"
 #include "Engine.h"
+#include "Engine/EngineTypes.h"
 #include "Components/PrimitiveComponent.h"
 #include "Public/WorldCollision.h"
 void ATankPlayerControler::BeginPlay() 
@@ -36,18 +37,32 @@ void ATankPlayerControler::AimTowardsCrosshair()
 }
 bool ATankPlayerControler::GetSightRayHitLocation(FVector &HitLocation) const
 {
-	
-	FindCrosshairPixelCoordinates();
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	auto ScreenLocation = FVector2D(ViewportSizeX*CrossHairXLocation, ViewportSizeY*CrossHairYLocation);
+	FVector LookDirection;
+	if (GetLookDirection(ScreenLocation, LookDirection))
+	{
+		FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+		FHitResult Hit ;
+		auto StartLocation=PlayerCameraManager->GetCameraLocation();
+		auto EndLocation = StartLocation + LookDirection*TankRange;
+		FCollisionResponseParams response;
+
+		GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, TraceParameters, response);
+		HitLocation = Hit.ImpactPoint;
+		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s "), *HitLocation.ToString());
+	}
 	
 	// De-project the screen position of the crosshair to a world direction
 	//Line-Trace along that look direction, see what we hit(up to max range)
 	
 	return true;
 }
-//find crosshair position in pixel coordinates
-void ATankPlayerControler::FindCrosshairPixelCoordinates() const
+bool ATankPlayerControler::GetLookDirection(FVector2D ScreenLocation, FVector &LookDirection)const
 {
-	int32 ViewportSizeX, ViewportSizeY;
-	GetViewportSize(ViewportSizeX, ViewportSizeY);
-	auto ScreenLocation = FVector2D(ViewportSizeX*CrossHairXLocation, ViewportSizeY*CrossHairYLocation);
+	FVector CameraLocation(0);
+	
+ return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraLocation, LookDirection);	 
 }
+
