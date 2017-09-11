@@ -8,7 +8,16 @@ void AMyAIController::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UE_LOG(LogTemp, Warning, TEXT("%s detected by %s AI controller "), *(GetPlayerTank()->GetName()), *(GetAIControlledTank()->GetName()));
+}
+void AMyAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (GetPlayerTank()) 
+	{
+		//TODOMove towards player
+		GetControlledTank()->AimAt(GetPlayerTank()->GetTargetLocation());
+		//TODO Fire if ready
+	}
 }
 ATank* AMyAIController::GetAIControlledTank() const
 {
@@ -20,4 +29,8 @@ ATank* AMyAIController::GetPlayerTank() const
 {
 	 
 	return Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+}
+ATank* AMyAIController::GetControlledTank() const
+{
+	return Cast<ATank>(GetPawn());
 }

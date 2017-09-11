@@ -19,13 +19,14 @@ private:
 		float CrossHairXLocation = 0.5f;
 	UPROPERTY(EditAnywhere)
 		float CrossHairYLocation = 0.333333f;
+	UPROPERTY(EditAnywhere)
+		float TankRange = 1000000;
 	ATank* GetControlledTank() const;
-
 	virtual void BeginPlay() override;
 	virtual void Tick(float) override;
 
 	void AimTowardsCrosshair();
 	bool GetSightRayHitLocation(FVector&HitLocation)const;
 	bool GetLookDirection(FVector2D ScreenLocation, FVector &LookDirection)const;
-	float TankRange = 1000000;
+
 };

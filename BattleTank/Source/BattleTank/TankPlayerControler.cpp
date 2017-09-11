@@ -5,6 +5,7 @@
 #include "Engine/EngineTypes.h"
 #include "Components/PrimitiveComponent.h"
 #include "Public/WorldCollision.h"
+
 void ATankPlayerControler::BeginPlay() 
 {
 	Super::BeginPlay();
@@ -18,10 +19,6 @@ void ATankPlayerControler::Tick(float DeltaTime)
 	AimTowardsCrosshair();
 }
 
-ATank* ATankPlayerControler::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
 void ATankPlayerControler::AimTowardsCrosshair()
 {
 	if (!GetControlledTank()) { return; }
@@ -31,8 +28,8 @@ void ATankPlayerControler::AimTowardsCrosshair()
 	//get world location through crosshair line-trace
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Player controller aiming towards: %s "), *HitLocation.ToString());
 		//tell controlled tank to aim at this point
+		GetControlledTank()->AimAt(HitLocation);
 	}
 }
 bool ATankPlayerControler::GetSightRayHitLocation(FVector &HitLocation) const
@@ -51,7 +48,6 @@ bool ATankPlayerControler::GetSightRayHitLocation(FVector &HitLocation) const
 
 		GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, TraceParameters, response);
 		HitLocation = Hit.ImpactPoint;
-		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s "), *HitLocation.ToString());
 	}
 	
 	// De-project the screen position of the crosshair to a world direction
@@ -66,3 +62,7 @@ bool ATankPlayerControler::GetLookDirection(FVector2D ScreenLocation, FVector &L
  return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraLocation, LookDirection);	 
 }
 
+ATank* ATankPlayerControler::GetControlledTank() const
+{
+	return Cast<ATank>(GetPawn());
+}
