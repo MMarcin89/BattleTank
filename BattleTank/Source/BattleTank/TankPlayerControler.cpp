@@ -37,6 +37,7 @@ bool ATankPlayerControler::GetSightRayHitLocation(FVector &HitLocation) const
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 	auto ScreenLocation = FVector2D(ViewportSizeX*CrossHairXLocation, ViewportSizeY*CrossHairYLocation);
+	
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
