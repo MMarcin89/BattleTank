@@ -41,10 +41,7 @@ void ATank::Fire()
 {
 	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
 
-	auto Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f fire button pressed"), Time)
-
-		if (Barrel&&bIsReloaded)
+			if (Barrel&&bIsReloaded)
 		{
 			//spawn projectile at socet location
 

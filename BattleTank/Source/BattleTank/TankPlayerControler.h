@@ -14,12 +14,12 @@ class BATTLETANK_API ATankPlayerControler : public APlayerController
 
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float CrossHairXLocation = 0.5f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float CrossHairYLocation = 0.333333f;
 	UPROPERTY(EditAnywhere)
-		float TankRange = 1000000;
+		float TankRange = 100000;
 	ATank* GetControlledTank() const;
 	virtual void BeginPlay() override;
 	virtual void Tick(float) override;
