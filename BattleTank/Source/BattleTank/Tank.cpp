@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
+#include "TankMovementComponent.h"
 #include "GameFramework/Actor.h"
 #include "Engine.h"
 #include "TankAimingComponent.h"
@@ -15,7 +16,7 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 	
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("AimingComponent"), false);
-}
+	}
 void ATank::SetTurretReference(UTankTurret* TurretToSet)
 {
 	TankAimingComponent->SetTurretReference(TurretToSet);
