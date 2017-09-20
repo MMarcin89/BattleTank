@@ -17,7 +17,8 @@ void AMyAIController::Tick(float DeltaTime)
 	ATank* AItank = Cast<ATank>(GetPawn());
 	if (PlayerTank)
 	{
-		//TODOMove towards player
+		//Move towards player
+		MoveToActor(PlayerTank, StopDistance);
 		AItank->AimAt(PlayerTank->GetTargetLocation());
 		//TODO Fire if ready
 		AItank->Fire();

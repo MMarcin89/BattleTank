@@ -19,6 +19,6 @@ private:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime)override;
 	
-	
+	float StopDistance = 2000;
 	
 };
