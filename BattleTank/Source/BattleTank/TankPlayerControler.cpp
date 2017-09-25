@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerControler.h"
-#include "Tank.h"
+#include "TankAimingComponent.h"
 #include "Engine.h"
 #include "Engine/EngineTypes.h"
 #include "Components/PrimitiveComponent.h"
@@ -10,7 +10,11 @@
 void ATankPlayerControler::BeginPlay() 
 {
 	Super::BeginPlay();
-		
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (ensure(AimingComponent))
+	{
+		FoundAimingComponent(AimingComponent);
+	}
 }
 
 void ATankPlayerControler::Tick(float DeltaTime)
@@ -21,7 +25,8 @@ void ATankPlayerControler::Tick(float DeltaTime)
 
 void ATankPlayerControler::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()) { return; }
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
 
 	FVector HitLocation;//out param
 	
@@ -29,7 +34,7 @@ void ATankPlayerControler::AimTowardsCrosshair()
 	if (GetSightRayHitLocation(HitLocation))
 	{
 		//tell controlled tank to aim at this point
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComponent->AimAt(HitLocation);
 	}
 }
 bool ATankPlayerControler::GetSightRayHitLocation(FVector &HitLocation) const
@@ -63,7 +68,3 @@ bool ATankPlayerControler::GetLookDirection(FVector2D ScreenLocation, FVector &L
  return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraLocation, LookDirection);	 
 }
 
-ATank* ATankPlayerControler::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}

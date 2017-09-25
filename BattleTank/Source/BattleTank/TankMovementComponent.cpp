@@ -12,7 +12,7 @@ void UTankMovementComponent::Initialize(UTankTrack*LeftTrackToSet, UTankTrack*Ri
 
 void UTankMovementComponent::IntendMoveForward(float StickThrow)
 {
-	if (!LeftTrack || !RightTrack) { return; }
+	if (!ensure(LeftTrack && RightTrack)) { return; }
 	LeftTrack->SetThrottle(StickThrow);
 	RightTrack->SetThrottle(StickThrow);
 }
@@ -20,7 +20,7 @@ void UTankMovementComponent::IntendMoveForward(float StickThrow)
 
 void UTankMovementComponent::IntendRotateClockwise(float StickThrow)
 {
-	if (!LeftTrack || !RightTrack) { return; }
+	if (!ensure(LeftTrack && RightTrack)) { return; }
 	LeftTrack->SetThrottle(StickThrow);
 	RightTrack->SetThrottle(-StickThrow);
 }
