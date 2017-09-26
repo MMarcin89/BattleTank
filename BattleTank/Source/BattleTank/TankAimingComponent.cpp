@@ -72,9 +72,17 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	}
 
 }
+int UTankAimingComponent::GetBulletsLeft() const
+{
+	return BulletsLeft;
+}
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
-	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTime)
+	if(BulletsLeft == 0)
+	{
+		ActualStatus = EFireStatus::OutOfAmmo;
+	}
+	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTime)
 	{
 		ActualStatus = EFireStatus::Reloading;
 	}
@@ -103,7 +111,7 @@ void UTankAimingComponent::MoveTurretTo(FVector AimDirection)
 	auto AimAsRotation = AimDirection.Rotation();
 	auto DeltaRotation = AimAsRotation - TurretRotation;
 
-	if (DeltaRotation.Yaw < 180)
+	if (FMath::Abs(DeltaRotation.Yaw) < 180)
 	{
 		
 		Turret->MoveHorizontal(DeltaRotation.Yaw);
@@ -117,12 +125,13 @@ void UTankAimingComponent::Fire()
 {
 	if (!ensure(Barrel)) { return; }
 	
-	if (ActualStatus!=EFireStatus::Reloading)
+	if (ActualStatus!=EFireStatus::Reloading&&BulletsLeft>0)
 	{
 		//spawn projectile at socet location
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Socket")), Barrel->GetSocketRotation(FName("Socket")));
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
+		BulletsLeft --;
 	}
 }
 

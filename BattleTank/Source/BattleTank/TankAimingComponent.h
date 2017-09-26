@@ -17,7 +17,8 @@ enum class EFireStatus :uint8
 {
 	Locked,
 	Reloading,
-	Aiming
+	Aiming,
+	OutOfAmmo
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -39,11 +40,16 @@ public:
 	
 	void AimAt(FVector HitLocation);
 	FVector AimDirection;
+	
+	UFUNCTION(BlueprintCallable, Category = "FireStatus")
+		int GetBulletsLeft()const;
 protected:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "FireStatus")
 		EFireStatus ActualStatus = EFireStatus::Reloading;
+
 	
+		
 private:	
 	
 	virtual void BeginPlay()override;
@@ -71,6 +77,7 @@ private:
 	UTankTurret* Turret = nullptr;
 
 	
+	int BulletsLeft = 3;
 
 	double LastFireTime = 0;
 };
