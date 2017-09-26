@@ -23,7 +23,9 @@ void AMyAIController::Tick(float DeltaTime)
 		//Move towards player
 		MoveToActor(PlayerTank, StopDistance);
 		AimingComponent->AimAt(PlayerTank->GetTargetLocation());
-		//TODO Fire if ready
-		AimingComponent->Fire();
+		if (AimingComponent->GetFireStatus() == EFireStatus::Locked)
+		{
+			AimingComponent->Fire();
+		}
 	}
 }

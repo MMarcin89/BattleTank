@@ -26,6 +26,11 @@ void UTankAimingComponent::BeginPlay()
 
 
 
+EFireStatus UTankAimingComponent::GetFireStatus() const
+{
+	return ActualStatus;
+}
+
 void UTankAimingComponent::Initialize(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet)
 {
 	Turret = TurretToSet;
@@ -98,7 +103,15 @@ void UTankAimingComponent::MoveTurretTo(FVector AimDirection)
 	auto AimAsRotation = AimDirection.Rotation();
 	auto DeltaRotation = AimAsRotation - TurretRotation;
 
-	Turret->MoveHorizontal(DeltaRotation.Yaw);
+	if (DeltaRotation.Yaw < 180)
+	{
+		
+		Turret->MoveHorizontal(DeltaRotation.Yaw);
+	}
+	else
+	{
+		Turret->MoveHorizontal(-DeltaRotation.Yaw);
+	}
 }
 void UTankAimingComponent::Fire()
 {
