@@ -42,7 +42,7 @@ public:
 	FVector AimDirection;
 	
 	UFUNCTION(BlueprintCallable, Category = "FireStatus")
-		int GetBulletsLeft()const;
+		int32 GetBulletsLeft()const;
 protected:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "FireStatus")
@@ -67,7 +67,7 @@ private:
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float LaunchSpeed = 5000.f;
+		float LaunchSpeed = 4000.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float ReloadTime = 2;
@@ -76,8 +76,8 @@ private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
-	
-	int BulletsLeft = 3;
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		int32 BulletsLeft = 3;
 
 	double LastFireTime = 0;
 };

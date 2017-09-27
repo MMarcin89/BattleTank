@@ -72,7 +72,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	}
 
 }
-int UTankAimingComponent::GetBulletsLeft() const
+int32 UTankAimingComponent::GetBulletsLeft() const
 {
 	return BulletsLeft;
 }
