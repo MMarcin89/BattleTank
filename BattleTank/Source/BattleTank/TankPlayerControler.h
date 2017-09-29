@@ -13,7 +13,9 @@ class BATTLETANK_API ATankPlayerControler : public APlayerController
 {
 	GENERATED_BODY()
 
-
+public:
+	UFUNCTION()
+		void OnTankDeath();
 protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
@@ -40,5 +42,7 @@ private:
 	bool bGetLookVectorHitLocation(FVector LookDirection, FVector & HitLocation) const;
 	
 	bool GetLookDirection(FVector2D ScreenLocation, FVector &LookDirection)const;
+
+	virtual void SetPawn(APawn* InPawn)override;
 
 };

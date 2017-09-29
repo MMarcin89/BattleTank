@@ -6,6 +6,7 @@
 #include "Engine/EngineTypes.h"
 #include "Components/PrimitiveComponent.h"
 #include "Public/WorldCollision.h"
+#include "Tank.h"
 
 void ATankPlayerControler::BeginPlay() 
 {
@@ -17,6 +18,17 @@ void ATankPlayerControler::BeginPlay()
 	}
 }
 
+void ATankPlayerControler::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossesedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossesedTank)) { return; }
+		//subscribe our local method
+		PossesedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerControler::OnTankDeath);
+	}
+}
 void ATankPlayerControler::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -64,7 +76,7 @@ bool ATankPlayerControler::bGetLookVectorHitLocation(FVector LookDirection, FVec
 	auto EndLocation = StartLocation + LookDirection*TankRange;
 	FCollisionResponseParams response;
 
-	if(GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, TraceParameters, response))
+	if(GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, EndLocation, ECollisionChannel::ECC_Camera, TraceParameters, response))
 	{
 	HitLocation = Hit.ImpactPoint;
 	return true;
@@ -78,3 +90,7 @@ bool ATankPlayerControler::GetLookDirection(FVector2D ScreenLocation, FVector &L
  return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraLocation, LookDirection);	 
 }
 
+void ATankPlayerControler::OnTankDeath()
+{
+	StartSpectatingOnly();
+}

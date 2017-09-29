@@ -14,7 +14,9 @@ UCLASS()
 class BATTLETANK_API AMyAIController : public AAIController
 {
 	GENERATED_BODY()
-
+public:
+	UFUNCTION()
+		void OnTankDeath();
 protected:
 	UPROPERTY(EditDefaultsOnly ,Category="Setup")
 		float StopDistance = 10000;
@@ -22,6 +24,7 @@ private:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime)override;
 	
+	virtual void SetPawn(APawn* InPawn)override;
 	
 	
 };

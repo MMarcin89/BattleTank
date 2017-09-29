@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
+#include "GameFramework/GameMode.h "
+
 
 
 
@@ -10,6 +12,7 @@ ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	
 	}
 
 
@@ -21,19 +24,28 @@ float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AC
 	CurrentHP -= DamageToApply;
 	if (CurrentHP == 0)
 	{
-		Destroy();
+		OnDeath.Broadcast();
 	}
-
-
-	UE_LOG(LogTemp,Warning,TEXT("DamageAmount: %f DamageToApply: %i"), DamageAmount, DamageToApply)
-
+	
 	return DamageToApply;
+}
+
+float ATank::GetHPPercent() const
+{
+	return (float)CurrentHP / (float)MaxHP;
+}
+
+int32 ATank::GetMaxHP()
+{
+	CurrentHP = MaxHP;
+	return CurrentHP;
 }
 
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-
+	GetMaxHP();
+	
 	}
 
 
